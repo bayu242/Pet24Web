@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pet24 - Identity Data</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .json-display {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        overflow-x: auto;
+      }
+      pre {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+      }
+      .error {
+        color: #d32f2f;
+        padding: 10px;
+        background-color: #ffebee;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+      .loading {
+        color: #1976d2;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Pet Identity Data</h1>
+      <div id="content" class="loading">Loading data...</div>
+    </div>
+    <script>
+      function displayData() {
+        try {
+          // Get query parameter 'd' from URL
+          const params = new URLSearchParams(window.location.search);
+          const dParam = params.get("d");
+
+          const contentDiv = document.getElementById("content");
+
+          if (!dParam) {
+            contentDiv.innerHTML =
+              '<div class="error"><strong>Error:</strong> Parameter "d" tidak ditemukan di URL</div>';
+            return;
+          }
+
+          // Parse JSON dari parameter 'd'
+          let data = JSON.parse(dParam);
+
+          // Cek apakah data adalah string (perlu di-parse lagi)
+          if (typeof data === 'string') {
+            data = JSON.parse(data);
+          }
+
+          // Debug: Tampilkan struktur data
+          console.log("Raw data:", data);
+          console.log("Type data:", typeof data);
+          console.log("data.own:", data.own);
+          console.log("Seluruh data:", JSON.stringify(data, null, 2));
+
+          // Display formatted JSON
+          contentDiv.className = "json-display";
+          contentDiv.innerHTML =
+            "<pre>" + JSON.stringify(data, null, 5) + "</pre>";
+        } catch (error) {
+          const contentDiv = document.getElementById("content");
+          contentDiv.innerHTML =
+            '<div class="error"><strong>Error:</strong> ' +
+            error.message +
+            "</div>";
+          console.error("Error:", error);
+        }
+      }
+
+      // Display data when page loads
+      window.addEventListener("load", displayData);
+    </script>
+  </body>
+</html>
