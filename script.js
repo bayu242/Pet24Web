@@ -105,6 +105,7 @@ function initializePetData() {
     petData.pn,
   );
   document.getElementById("petPhoto").src = getPetIcon(petData.pt);
+  console.log(getPetIcon(petData.pt))
   document.getElementById("petBirthday").innerHTML = petData.pbd;
   document.getElementById("petAge").innerHTML = calculateAge(petData.pbd);
   document.getElementById("petNote").innerHTML = petData.n;
