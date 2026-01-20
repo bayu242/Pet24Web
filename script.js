@@ -96,7 +96,7 @@ function initializePetData() {
   let petData = dataParam;
   if (dataParam) {
     try {
-      petData = JSON.parse(dataParam);
+      petData = JSON.parse(JSON.parse(dataParam));
       console.log(petData);
     } catch (error) {
       console.error("Error parsing data:", error);
