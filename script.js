@@ -1,61 +1,44 @@
 // Fungsi get icon hewan berdasarkan tipe
 function getPetIcon(petType) {
-  // Tentukan icon berdasarkan tipe hewan
-  // ct = kucing (cat), dg = anjing (dog)
-  let iconPath = "assets/dog.svg"; // default
-  
   if (petType === "ct") {
-    iconPath = "assets/cat.svg";
-  } else if (petType === "dg") {
-    iconPath = "assets/dog.svg";
-  }
-  
-  return iconPath;
-}
-
-// Fungsi format tanggal
-function formatDate(dateString) {
-  if (!dateString) return "-";
-  // Handle format DD/MM/YYYY
-  try {
-    const [day, month, year] = dateString.split("/");
-    if (day && month && year) {
-      return `${day}/${month}/${year}`;
-    }
-    return dateString;
-  } catch {
-    return dateString;
+    return "assets/cat.svg";
+  } else {
+    return "assets/dog.svg";
   }
 }
 
-// Fungsi hitung umur (tahun dan bulan)
+// Fungsi hitung umur (tahun, bulan, dan hari)
 function calculateAge(birthDateString) {
   if (!birthDateString) return "-";
-  
+
   try {
     // Parse format DD/MM/YYYY
     const [day, month, year] = birthDateString.split("/");
     if (!day || !month || !year) return "-";
-    
+
     const birthDate = new Date(year, month - 1, day);
     const today = new Date();
-    
+
     let years = today.getFullYear() - birthDate.getFullYear();
     let months = today.getMonth() - birthDate.getMonth();
-    
-    // Sesuaikan jika hari ulang tahun belum terjadi bulan ini
-    if (today.getDate() < birthDate.getDate()) {
+    let days = today.getDate() - birthDate.getDate();
+
+    // Sesuaikan jika hari negatif
+    if (days < 0) {
       months--;
+      // Ambil jumlah hari dari bulan sebelumnya
+      const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days += prevMonth.getDate();
     }
-    
-    // Sesuaikan bulan negatif
+
+    // Sesuaikan jika bulan negatif
     if (months < 0) {
       years--;
       months += 12;
     }
-    
+
     if (years < 0) return "-";
-    
+
     // Format output
     let ageText = "";
     if (years > 0) {
@@ -64,32 +47,45 @@ function calculateAge(birthDateString) {
     if (months > 0) {
       ageText += (ageText ? " " : "") + `${months} bulan`;
     }
-    
-    return ageText || "0 bulan";
+    if (days > 0) {
+      ageText += (ageText ? " " : "") + `${days} hari`;
+    }
+
+    return ageText || "0 hari";
   } catch {
     return "-";
   }
-}
-
-// Fungsi format alamat
+} // Fungsi format alamat
 function formatAddress(address) {
   if (!address) return "-";
   // Potong jika terlalu panjang
   return address.length > 100 ? address.substring(0, 100) + "..." : address;
 }
 
-// Data hewan default
-const defaultData = {
-  n: "Boy",
-  pbd: "28/12/2025",
-  pt: "ct",
-  own: "Bayu",
-  pn: "0812-3456-7890",
-  pl: {
-    address: "Kelurahan Sindurjan Kode Pos RT.3/RW.2, Rw. I, Sindurjan, Kec. Purworejo, Kabupaten Purworejo, Jawa Tengah 54113, Indonesia",
-    coords: { lat: -7.7115737, long: 109.9974265 }
+function capitalizeFirstLetter(string) {
+  if (string.length === 0) {
+    return string; // Handles empty strings gracefully
   }
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const defaultData = {
+  on: "Bayu Seto Aji",
+  oc: "085875777353",
+  pn: "Boy",
+  pbd: "20/04/2018",
+  pt: "ct",
+  pl: {
+    adr: "Kelurahan Sindurjan Kode Pos RT.3/RW.2, Rw. I, Sindurjan, Kec. Purworejo, Kabupaten Purworejo, Jawa Tengah 54113, Indonesia",
+    crd: {
+      la: -7.7115737,
+      lo: 109.9974265,
+    },
+  },
+  n: "suka makan tongkol",
 };
+
+// console.log(encodeURIComponent(JSON.stringify(defaultData)));
 
 // Fungsi untuk menginisialisasi data
 function initializePetData() {
@@ -97,50 +93,48 @@ function initializePetData() {
   const searchParams = new URLSearchParams(window.location.search);
   const dataParam = searchParams.get("d");
 
-  // Parse data dari URL atau gunakan default
-  let petData = defaultData;
+  let petData = dataParam;
   if (dataParam) {
     try {
-      petData = JSON.parse(decodeURIComponent(dataParam));
-      // Gabungkan dengan default jika ada field yang hilang
-      petData = { ...defaultData, ...petData };
+      petData = JSON.parse(dataParam);
+      console.log(petData);
     } catch (error) {
       console.error("Error parsing data:", error);
-      petData = defaultData;
     }
   }
 
-  // Log data untuk debugging
-  console.log("Data Hewan:", petData);
-  console.log("Tipe Hewan (pt):", petData.pt);
-  console.log("Icon Path:", getPetIcon(petData.pt));
+  // pet data
+  document.getElementById("petNameHead").innerHTML = capitalizeFirstLetter(
+    petData.pn,
+  );
+  document.getElementById("petName").innerHTML = capitalizeFirstLetter(
+    petData.pn,
+  );
+  document.getElementById("petBirthday").innerHTML = petData.pbd;
+  document.getElementById("petAge").innerHTML = calculateAge(petData.pbd);
+  document.getElementById("petNote").innerHTML = petData.n;
 
-  // Isi detail hewan
-  document.getElementById("petName").textContent = (petData.n || "HENRY").toUpperCase();
-  document.getElementById("detailName").textContent = petData.n || "-";
-  document.getElementById("detailBirthday").textContent = formatDate(petData.pbd);
-  document.getElementById("detailAge").textContent = calculateAge(petData.pbd);
+  // owner data
+  document.getElementById("ownerName").innerHTML = petData.on;
+  document.getElementById("ownerContact").innerHTML = petData.oc;
+  document.getElementById("ownerAddress").innerHTML = petData.pl.adr;
 
-  // Isi kontak pemilik
-  document.getElementById("ownerName").textContent = petData.own || "-";
-  document.getElementById("ownerPhone").textContent = petData.pn || "-";
-  document.getElementById("ownerAddress").textContent = formatAddress(petData.pl?.address);
-  document.getElementById("ownerEmail").textContent = petData.email || "-";
+  const goToMap = () => {
+    console.log(petData.pl.crd.la);
+  };
 
-  // Set gambar hewan berdasarkan tipe
-  const petPhoto = document.getElementById("petPhoto");
-  const iconPath = getPetIcon(petData.pt);
-  petPhoto.src = iconPath;
-  petPhoto.alt = petData.pt === "ct" ? "Ikon Kucing" : "Ikon Anjing";
-  
-  // Log status image
-  petPhoto.onload = () => console.log("✓ Icon berhasil dimuat:", iconPath);
-  petPhoto.onerror = () => console.error("✗ Gagal memuat icon:", iconPath);
+  if (petData.pl.crd.la && petData.pl.crd.lo) {
+    document.getElementById("maps").innerHTML += `<a
+                href="https://www.google.com/maps?q=${petData.pl.crd.la},${petData.pl.crd.lo}"
+              >
+                <img src="assets/location.svg" width="50" />
+              </a>`;
+  }
 }
 
 // Jalankan saat DOM ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializePetData);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializePetData);
 } else {
   initializePetData();
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,26 +17,35 @@
         <!-- Bagian Foto & Nama Hewan -->
         <div class="petSection">
           <div class="photoCircle">
-            <img id="petPhoto" src="assets/dog.svg" alt="Foto Hewan" class="petPhoto" />
+            <img
+              id="petPhoto"
+              src="assets/dog.svg"
+              alt="Foto Hewan"
+              class="petPhoto"
+            />
           </div>
           <div class="petNameBox">
-            <h1 id="petName" class="petNameTitle">HENRY</h1>
+            <h1 id="petNameHead" class="petNameTitle">HENRY</h1>
           </div>
         </div>
 
         <!-- Bagian Detail Hewan -->
         <div class="petDetails">
-          <div class="detailGroup">
+          <div class="petGroup">
             <label>Nama</label>
-            <p id="detailName">-</p>
+            <p id="petName">-</p>
           </div>
-          <div class="detailGroup">
+          <div class="petGroup">
             <label>Tanggal Lahir</label>
-            <p id="detailBirthday">-</p>
+            <p id="petBirthday">-</p>
           </div>
-          <div class="detailGroup">
+          <div class="petGroup">
             <label>Umur</label>
-            <p id="detailAge">-</p>
+            <p id="petAge">-</p>
+          </div>
+          <div class="petGroup">
+            <label>Catatan</label>
+            <p id="petNote">-</p>
           </div>
         </div>
 
@@ -49,11 +58,12 @@
           </div>
           <div class="contactGroup">
             <label>Telepon</label>
-            <p id="ownerPhone">-</p>
+            <p id="ownerContact">-</p>
           </div>
           <div class="contactGroup">
             <label>Alamat</label>
             <p id="ownerAddress">-</p>
+            <div id="maps"></div>
           </div>
         </div>
       </div>
