@@ -93,15 +93,9 @@ function initializePetData() {
   const searchParams = new URLSearchParams(window.location.search);
   const dataParam = searchParams.get("d");
 
-  let petData = dataParam;
-  if (dataParam) {
-    try {
-      petData = JSON.parse(JSON.parse(dataParam));
-      console.log(petData);
-    } catch (error) {
-      console.error("Error parsing data:", error);
-    }
-  }
+  let petData = JSON.parse(JSON.parse(dataParam));
+
+  console.log(petData)
 
   // pet data
   document.getElementById("petNameHead").innerHTML = capitalizeFirstLetter(
