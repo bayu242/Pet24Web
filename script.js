@@ -95,7 +95,7 @@ function initializePetData() {
 
   let petData = JSON.parse(JSON.parse(dataParam));
 
-  console.log(petData)
+  console.log(petData);
 
   // pet data
   document.getElementById("petNameHead").innerHTML = capitalizeFirstLetter(
@@ -104,6 +104,7 @@ function initializePetData() {
   document.getElementById("petName").innerHTML = capitalizeFirstLetter(
     petData.pn,
   );
+  document.getElementById("petPhoto").src = getPetIcon(petData.pt);
   document.getElementById("petBirthday").innerHTML = petData.pbd;
   document.getElementById("petAge").innerHTML = calculateAge(petData.pbd);
   document.getElementById("petNote").innerHTML = petData.n;
